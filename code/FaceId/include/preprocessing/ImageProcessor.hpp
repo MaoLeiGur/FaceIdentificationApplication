@@ -18,6 +18,9 @@ public:
 	// Initialize the ImageProcessor with configuration parameters
 	void initialize(const ImageProcessingConfig& config);
 
+	void process(const cv::Mat& image, cv::Mat& processedImage);
+
+
 	// Preprocessing functions  
 	bool resizeImage(const cv::Mat& image, int width, int height, cv::Mat& resizedImage);
 	bool convertToGrayscale(const cv::Mat& image, cv::Mat& grayscaleImage);
@@ -81,7 +84,7 @@ public:
 
 private:
 
-	std::shared_ptr<spdlog::logger> m_logger;
+	std::shared_ptr<spdlog::logger> pLogger;
 
 
 	ImageProcessingConfig config_;

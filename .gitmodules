@@ -1,0 +1,15 @@
+[submodule "external/dlib"]
+	path = external/dlib
+	url = https://github.com/davisking/dlib.git
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json.git
+[submodule "external/spdlog"]
+	path = external/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "external/moodycamel-ConcurrentQueue"]
+	path = external/moodycamel-ConcurrentQueue
+	url = https://github.com/ikiller1/moodycamel-ConcurrentQueue.git
+[submodule "external/imgui"]
+	path = external/imgui
+	url = https://github.com/ocornut/imgui.git

@@ -150,7 +150,6 @@ struct DatabaseConfig {
 struct FaceEncoderConfig
 {
 	std::string model_path;
-	int batch_size = 1; // Default batch size
 	std::string backend = "opencv";
 };
 

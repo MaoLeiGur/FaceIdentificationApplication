@@ -10,6 +10,7 @@ ConfigManager::ConfigManager(const std::shared_ptr<spdlog::logger>& logger):Conf
 {
 	// Initialize the logger if needed
 	pLogger = logger;
+    pLogger->info("ConfigManager created.");
 }
 
 
@@ -74,6 +75,21 @@ void ConfigManager::loadConfig(const std::string& configFilePath) {
             databaseConfig_.table_name = dbc.value("table_name", "faces");
             databaseConfig_.auto_create = dbc.value("auto_create", true);
         }
+
+        // Load EncoderConfig  
+        if (jsonConfig.contains("EncoderConfig")) {
+            auto ec = jsonConfig["EncoderConfig"];
+            faceEncoderConfig_.model_path = ec.value("model_path", "");
+            faceEncoderConfig_.backend = ec.value("backend", "opencv");
+        }
+
+        // Load AlignerConfig  
+        if (jsonConfig.contains("AlignerConfig")) {
+            auto ac = jsonConfig["AlignerConfig"];
+            faceAlignerConfig_.model_path = ac.value("model_path", "");
+            faceAlignerConfig_.backend = ac.value("backend", "opencv");
+        }
+
     }
     catch (const std::exception& e) {
         throw std::runtime_error("Error loading configuration: " + std::string(e.what()));
@@ -84,10 +100,13 @@ void ConfigManager::initialize(const std::string& configFilePath) {
 	
 	configFilePath_ = configFilePath;
 	if (configFilePath_.empty()) { // If no config file is provided, use default values
-		imageProcessingConfig_ = ImageProcessingConfig(); // Set default or loaded values
-		detectionConfig_ = DetectionConfig(); // Set default or loaded values
-		recognitionConfig_ = RecognitionConfig(); // Set default or loaded values
-		databaseConfig_ = DatabaseConfig(); // Set default or loaded values
+		imageProcessingConfig_  = ImageProcessingConfig(); // Set default or loaded values
+		detectionConfig_        = DetectionConfig(); // Set default or loaded values
+		recognitionConfig_      = RecognitionConfig(); // Set default or loaded values
+		databaseConfig_         = DatabaseConfig(); // Set default or loaded values
+        faceAlignerConfig_      = FaceAlignerConfig();
+        faceEncoderConfig_      = FaceEncoderConfig();
+        recognitionConfig_      = RecognitionConfig();
 	}
 	else
 	{

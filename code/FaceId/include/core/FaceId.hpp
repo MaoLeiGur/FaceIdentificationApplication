@@ -49,6 +49,12 @@ private:
 	std::unique_ptr<FaceRecognizer> pRecognizer;
 	std::unique_ptr<FaceEncoder> pEncoder;
 	std::unique_ptr<FaceAligner> pAligner;
+
+
+
+
+	cv::Mat							ppFrame_;
+	std::vector<FaceDetection>		facesDetections_;
 };
 
 

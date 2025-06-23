@@ -16,7 +16,7 @@ public:
     
     static Logger& getInstance();
     void init(const LoggerConfig& config);
-    std::shared_ptr<spdlog::logger>& getLogger() const; // { return logger_; }
+    std::shared_ptr<spdlog::logger>& getLogger();
     // Access singleton instance  
     
 

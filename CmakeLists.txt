@@ -30,13 +30,25 @@ set(IMGUI_DIR "${EXTERNAL_DIR}/imgui")
 # Add nlohmann_json as a subdirectory
 add_subdirectory(${JSON_DIR})
 
-# Add nlohmann_json as a subdirectory
+# Add spdlog as a subdirectory
 add_subdirectory(${SPDLOG_DIR})
+
+
+# Add dlib as a subdirectory
+add_subdirectory(${DLIB_DIR})
+
 
 # Find required packages
 find_package(OpenCV 4.10 PATHS "C:/opencv/opencv4100/build" REQUIRED EXACT )
 
+message(STATUS "OpenCV version: ${OpenCV_VERSION_MAJOR}.${OpenCV_VERSION_MINOR}.${OpenCV_VERSION_PATCH}")
 
+set(OPENCV_VER ${OpenCV_VERSION_MAJOR}${OpenCV_VERSION_MINOR}${OpenCV_VERSION_PATCH})
+message(STATUS " OPENCV_VER = ${OPENCV_VER}")
+#Copy opencv dlls files to exeucitable folder
+
+
+add_compile_definitions(CONFIG_DIR="${CMAKE_CURRENT_SOURCE_DIR}/config")
 #find_package(SQLite3 REQUIRED)
 #find_package(DLIB PATHS "${3RD_PARTY_DIR}/dlib" REQUIRED)
 
@@ -75,17 +87,9 @@ endif()
 
 
 # Face ID library
-
 set(FACE_ID_DIR "${CMAKE_CURRENT_SOURCE_DIR}/code/FaceId")
-
 set(FACE_ID_INCLUDE_DIR "${FACE_ID_DIR}/include")
-set(FACE_ID_API_INCLUDE_DIR "${FACE_ID_INCLUDE_DIR}/api")
-set(FACE_ID_CORE_INCLUDE_DIR "${FACE_ID_INCLUDE_DIR}/core")
-set(FACE_ID_PREPROCESSING_INCLUDE_DIR "${FACE_ID_INCLUDE_DIR}/preprocessing")
-set(FACE_ID_utils_INCLUDE_DIR "${FACE_ID_INCLUDE_DIR}/utils")
-
 set(FACE_ID_SOURCE_DIR "${FACE_ID_DIR}/source")
-
 file(GLOB_RECURSE FACE_ID_SOURCE_FILES  "${FACE_ID_SOURCE_DIR}/*.cpp*")
 file(GLOB_RECURSE FACE_ID_INCLUDE_FILES  "${FACE_ID_INCLUDE_DIR}/*.hpp*")
 
@@ -129,3 +133,32 @@ target_include_directories(face_id_lib
 add_executable(face_id_app 
     "${CMAKE_CURRENT_SOURCE_DIR}/code/main.cpp")
 target_link_libraries(face_id_app PRIVATE face_id_lib spdlog::spdlog ${OpenCV_LIBS} )
+
+
+
+
+
+# Install the folder to the binary directory
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/config/
+        DESTINATION ${CMAKE_BINARY_DIR}/config
+        FILES_MATCHING PATTERN "*")
+
+
+
+# Find all OpenCV DLLs
+file(GLOB OPENCV_DLLS_TO_COPY "${OpenCV_DIR}/x64/vc16/bin/*.dll")
+
+# Install them
+install(FILES ${OPENCV_DLLS_TO_COPY}
+        DESTINATION ${CMAKE_BINARY_DIR})
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/config/
+        DESTINATION ${CMAKE_BINARY_DIR}/config
+        FILES_MATCHING PATTERN "*")
+
+
+#file(COPY "${OpenCV_DIR}/x64/vc16/bin/opencv_world${OPENCV_VER}.dll" DESTINATION ${CMAKE_BINARY_DIR})
+#file(COPY "${OpenCV_DIR}/x64/vc16/bin/opencv_world${OPENCV_VER}d.dll" DESTINATION ${CMAKE_BINARY_DIR})
+
+
+

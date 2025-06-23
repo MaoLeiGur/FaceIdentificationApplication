@@ -6,7 +6,10 @@ Logger& Logger::getInstance() {
 	return instance;
 }
 
-
+std::shared_ptr<spdlog::logger>& Logger::getLogger()
+{
+	return logger_;
+}
 
 void Logger::init(const LoggerConfig& config) {
 	config_ = config;

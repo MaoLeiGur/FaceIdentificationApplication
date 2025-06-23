@@ -8,7 +8,6 @@ CFaceId::CFaceId()
 	// Initialize components
 	LoggerConfig LoggerConfig;
 
-
 	Logger::getInstance().init(LoggerConfig);
 	pLogger = Logger::getInstance().getLogger();
 
@@ -16,10 +15,15 @@ CFaceId::CFaceId()
 	pImageProcessor = std::make_unique<ImageProcessor>(pLogger);
 	pDetector = std::make_unique<FaceDetector>(pLogger);
 	pRecognizer = std::make_unique<FaceRecognizer>(pLogger);
-	
+	pEncoder = std::make_unique<FaceEncoder>(pLogger);
+	pAligner = std::make_unique<FaceAligner>(pLogger);
+
 	// pEncoder = std::make_unique<FaceEncoder>();
 	// pAligner = std::make_unique<FaceAligner>();
 
+
+	//ppFrame_;
+	facesDetections_.reserve(5);
 }
 
 CFaceId::~CFaceId()
@@ -42,41 +46,31 @@ void CFaceId::initialize(const std::string& config_path)
 
 ErrorCode CFaceId::Run(const cv::Mat& image, Person& person)
 {
+	facesDetections_.clear();
+
 	if (image.empty()) {
 		pLogger->error("Input image is empty.");
 		return ErrorCode::INVALID_INPUT;
 	}
 
-	cv::Mat frameGray,frameRezised;
-	
 	//(1) PreProcessing:
-	pImageProcessor->convertToGrayscale(image, frameGray);
-	ImageProcessingConfig imageProcessingConfig = pConfigManager->get_imageProcessingConfig();
-	uint16_t width = imageProcessingConfig.resize_width;
-	uint16_t height = imageProcessingConfig.resize_height;
-	if (width == 0 || height == 0) {
-		pLogger->error("Resize dimensions are not set in the configuration.");
-		return ErrorCode::INVALID_CONFIG;
-	}
-	pImageProcessor->applyResize(frameGray, width,height, frameRezised);
-
+	pImageProcessor->process(image, ppFrame_);
 	
 	//(2) Detect faces in the image
-	std::vector<FaceDetection> facesDetections;
-	ErrorCode detectionResult = pDetector->detect(frameRezised, facesDetections);
-	if (detectionResult != ErrorCode::SUCCESS || facesDetections.empty()) {
+	
+	ErrorCode detectionResult = pDetector->detect(ppFrame_, facesDetections_);
+	if (detectionResult != ErrorCode::SUCCESS || facesDetections_.empty()) {
 		return detectionResult;
 	}
 
 	//for each face detected in the image:
-	if (facesDetections.size() > 1) {
+	if (facesDetections_.size() > 1) {
 		pLogger->warn("Multiple faces detected, recognizing the first one.");
 	}
 
-
 	//(4) Encode Faces:
 	std::vector<FaceLandmarks> landmarks;
-	ErrorCode encodingResult = pEncoder->encodeBatch(facesDetections, landmarks);
+	ErrorCode encodingResult = pEncoder->encodeBatch(facesDetections_, landmarks);
 	if (encodingResult != ErrorCode::SUCCESS) {
 		return encodingResult;
 	}
@@ -84,7 +78,7 @@ ErrorCode CFaceId::Run(const cv::Mat& image, Person& person)
 	//(3) Detect faces in the image:
 	//pAligner->align(facesDetections[0].face_image, facesDetections[0].face_image_aligned);
 	// Recognize the first detected face
-	ErrorCode recognitionResult = pRecognizer->recognize(facesDetections[0], person);
+	ErrorCode recognitionResult = pRecognizer->recognize(facesDetections_[0], person);
 	return recognitionResult;
 }
 
