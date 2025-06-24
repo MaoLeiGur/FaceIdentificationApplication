@@ -55,6 +55,7 @@ private:
 
 	cv::Mat							ppFrame_;
 	std::vector<FaceDetection>		facesDetections_;
+
 };
 
 

@@ -26,8 +26,14 @@ public:
 private: 
 	std::shared_ptr<spdlog::logger> pLogger;
 	//cv::dnn::Net model;
-    bool        profiling_enabled;
-    float       confidence_threshold;
+    bool                    profiling_enabled;
+    float                   confidence_threshold;
+    cv::CascadeClassifier   face_cascade;
+    cv::dnn::Net            model;
+	DetectionConfig		    config_; 
+
+    std::vector<cv::Rect>   faces_;
+
 
     // Preprocessing
     cv::Mat preprocessImage(const cv::Mat& image);

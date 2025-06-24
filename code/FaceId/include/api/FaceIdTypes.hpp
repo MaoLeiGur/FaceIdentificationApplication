@@ -23,27 +23,24 @@ struct Point2D {
 };
 
 struct BoundingBox {
-    float x, y, width, height;
+    cv::Rect    bbox;
+    uint8_t     label;
     float confidence;
     
-    BoundingBox() : x(0), y(0), width(0), height(0), confidence(0.0f) {}
-    BoundingBox(float x, float y, float w, float h, float conf = 1.0f)
-        : x(x), y(y), width(w), height(h), confidence(conf) {}
-    
-    cv::Rect toCvRect() const {
-        return cv::Rect(static_cast<int>(x), static_cast<int>(y), 
-                       static_cast<int>(width), static_cast<int>(height));
-    }
+    BoundingBox() : bbox(cv::Rect()),label(0), confidence(0.0f) {}
+    BoundingBox(cv::Rect bbox, uint8_t label, float conf = 1.0f)
+        : bbox(bbox),label(label), confidence(conf) {}
+
 };
 
 // Face detection result
 struct FaceDetection {
-    BoundingBox bbox;
+    cv::Rect bbox;
     float confidence;
     cv::Mat face_image;
     
     FaceDetection() : confidence(0.0f) {}
-    FaceDetection(const BoundingBox& box, float conf) 
+    FaceDetection(const cv::Rect& box, float conf)
         : bbox(box), confidence(conf) {}
 };
 
@@ -105,6 +102,7 @@ struct Person {
 
 // Configuration structures
 struct ImageProcessingConfig {
+    bool debug = true;
     bool flip = false;
     bool normalize = true;
     bool resize = true;
@@ -124,18 +122,24 @@ struct ImageProcessingConfig {
 
 
 struct DetectionConfig {
+    bool debug = true;
     float confidence_threshold = 0.7f;
     float nms_threshold = 0.4f;
     int input_size = 640;
-    std::string model_path;
-    std::string backend = "opencv";
+    std::string model_path = "";
+	std::string model_name = "";
+	std::string model_file_type = ""; // or "caffe", "tensorflow", etc.
+    std::string backend = "";
 };
 
 struct RecognitionConfig {
+    bool debug = true;
     float similarity_threshold = 0.6f;
     int embedding_size = 512;
     bool normalize_embeddings = true;
     std::string model_path;
+    std::string model_name = "face_detector";
+    std::string model_file_type = "onnx"; // or "caffe", "tensorflow", etc.
     std::string backend = "opencv";
 };
 

@@ -18,11 +18,6 @@ CFaceId::CFaceId()
 	pEncoder = std::make_unique<FaceEncoder>(pLogger);
 	pAligner = std::make_unique<FaceAligner>(pLogger);
 
-	// pEncoder = std::make_unique<FaceEncoder>();
-	// pAligner = std::make_unique<FaceAligner>();
-
-
-	//ppFrame_;
 	facesDetections_.reserve(5);
 }
 
@@ -81,5 +76,3 @@ ErrorCode CFaceId::Run(const cv::Mat& image, Person& person)
 	ErrorCode recognitionResult = pRecognizer->recognize(facesDetections_[0], person);
 	return recognitionResult;
 }
-
-

@@ -20,14 +20,18 @@
    "confidence_threshold": 0.7,  
    "nms_threshold": 0.4,  
    "input_size": 640,  
-   "model_path": "",  
-   "backend": "opencv"  
+   "model_path":"C:\work\Code\Projects\FaceIdentificationApplication\config\FaceDetectors\haarcascades\haarcascade_frontalface_default.xml",
+   "model_name": "haarcascade_frontalface_default",  
+   "model_file_type":"xml",
+   "backend": "haarcascade"  
  },  
  "RecognitionConfig": {  
    "similarity_threshold": 0.6,  
    "embedding_size": 512,  
    "normalize_embeddings": true,  
-   "model_path": "",  
+   "model_path":"",
+   "model_name": "",  
+   "model_file_type":"xml",
    "backend": "opencv"  
  },  
  "DatabaseConfig": {  

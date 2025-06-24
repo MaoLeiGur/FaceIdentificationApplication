@@ -30,6 +30,8 @@ void ImageProcessor::process(const cv::Mat& image, cv::Mat& processedImage)
 	cv::Mat frameGray, frameRezised;
 	convertToGrayscale(image, frameGray);
 	applyResize(frameGray, config_.resize_width, config_.resize_height, processedImage);
+
+	applyHistogramEqualization(processedImage, processedImage);
 }
 
 bool ImageProcessor::resizeImage(const cv::Mat& image, int width, int height, cv::Mat& resizedImage) {

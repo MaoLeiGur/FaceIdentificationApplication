@@ -30,6 +30,7 @@ void ConfigManager::loadConfig(const std::string& configFilePath) {
         // Load ImageProcessingConfig  
         if (jsonConfig.contains("ImageProcessingConfig")) {
             auto ipc = jsonConfig["ImageProcessingConfig"];
+			imageProcessingConfig_.debug = ipc.value("debug", true);
             imageProcessingConfig_.flip = ipc.value("flip", false);
             imageProcessingConfig_.normalize = ipc.value("normalize", true);
             imageProcessingConfig_.resize = ipc.value("resize", true);
@@ -50,20 +51,26 @@ void ConfigManager::loadConfig(const std::string& configFilePath) {
         // Load DetectionConfig  
         if (jsonConfig.contains("DetectionConfig")) {
             auto dc = jsonConfig["DetectionConfig"];
+			detectionConfig_.debug = dc.value("debug", true);
             detectionConfig_.confidence_threshold = dc.value("confidence_threshold", 0.7f);
             detectionConfig_.nms_threshold = dc.value("nms_threshold", 0.4f);
             detectionConfig_.input_size = dc.value("input_size", 640);
             detectionConfig_.model_path = dc.value("model_path", "");
+            detectionConfig_.model_name = dc.value("model_name", "");
+            detectionConfig_.model_file_type = dc.value("model_file_type", "");
             detectionConfig_.backend = dc.value("backend", "opencv");
         }
 
         // Load RecognitionConfig  
         if (jsonConfig.contains("RecognitionConfig")) {
             auto rc = jsonConfig["RecognitionConfig"];
+			recognitionConfig_.debug = rc.value("debug", true);
             recognitionConfig_.similarity_threshold = rc.value("similarity_threshold", 0.6f);
             recognitionConfig_.embedding_size = rc.value("embedding_size", 512);
             recognitionConfig_.normalize_embeddings = rc.value("normalize_embeddings", true);
             recognitionConfig_.model_path = rc.value("model_path", "");
+            recognitionConfig_.model_name = rc.value("model_name", "");
+            recognitionConfig_.model_file_type = rc.value("model_file_type", "");
             recognitionConfig_.backend = rc.value("backend", "opencv");
         }
 
