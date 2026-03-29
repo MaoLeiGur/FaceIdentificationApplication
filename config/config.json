@@ -1,0 +1,43 @@
+{  
+ "ImageProcessingConfig": {  
+   "flip": false,  
+   "normalize": true,  
+   "resize": true,  
+   "resize_width": 640,  
+   "resize_height": 640,  
+   "grayscale": false,  
+   "equalize": false,  
+   "rotate": false,  
+   "rotate_angle": 0,  
+   "crop": false,  
+   "crop_x": 0,  
+   "crop_y": 0,  
+   "crop_width": 0,  
+   "crop_height": 0,  
+   "detect_faces": false  
+ },  
+ "DetectionConfig": {  
+   "confidence_threshold": 0.7,  
+   "nms_threshold": 0.4,  
+   "input_size": 640,  
+   "model_path":"C:\work\Code\Projects\FaceIdentificationApplication\config\FaceDetectors\haarcascades\haarcascade_frontalface_default.xml",
+   "model_name": "haarcascade_frontalface_default",  
+   "model_file_type":"xml",
+   "backend": "haarcascade"  
+ },  
+ "RecognitionConfig": {  
+   "similarity_threshold": 0.6,  
+   "embedding_size": 512,  
+   "normalize_embeddings": true,  
+   "model_path":"",
+   "model_name": "",  
+   "model_file_type":"xml",
+   "backend": "opencv"  
+ },  
+ "DatabaseConfig": {  
+   "type": "sqlite",  
+   "connection_string": "",  
+   "table_name": "faces",  
+   "auto_create": true  
+ }  
+}
